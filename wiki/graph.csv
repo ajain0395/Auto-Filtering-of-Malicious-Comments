@@ -1,0 +1,5 @@
+Classification Technique,Average Accuracy
+Logistic Regression Binary Relevance,0.9709952379463774
+MultinomialNB Binary Relevance,0.9732017255931726
+Logistic Regression Classifier Chain,0.968861692039972
+MultinomialNB Classifier Chain,0.9552007460898017
