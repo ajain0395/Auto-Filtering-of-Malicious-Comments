@@ -23,9 +23,9 @@ from sklearn.linear_model import LogisticRegressionCV
 from sklearn import svm
 from sklearn.neural_network import MLPClassifier
 from sklearn import metrics
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as VS
+#from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as VS
 import textstat.textstat 
-sentiment_analyzer = VS()
+#sentiment_analyzer = VS()
 
 
 title=[]
@@ -54,7 +54,7 @@ def preprocessing(text):
 
 
 def otherfeatures(tweet):
-    sentiment = sentiment_analyzer.polarity_scores(tweet)
+    #sentiment = sentiment_analyzer.polarity_scores(tweet)
     words = preprocessing(tweet)
     syllables = textstat.syllable_count(words) #count syllables in words
     num_chars = sum(len(w) for w in words) #num chars in words
@@ -63,14 +63,9 @@ def otherfeatures(tweet):
     num_words = len(words.split())
     avg_syl = round(float((syllables+0.001))/float(num_words+0.001),4)
     num_unique_terms = len(set(words.split()))
-    ###Modified FK grade, where avg words per sentence is just num words/1
-    FKRA = round(float(0.39 * float(num_words)/1.0) + float(11.8 * avg_syl) - 15.59,1)
-    ##Modified FRE score, where sentence fixed to 1
+    FKRA = round(float(0.39 * float(num_words)/1.0))
     FRE = round(206.835 - 1.015*(float(num_words)/1.0) - (84.6*float(avg_syl)),2)
-    #twitter_objs = count_twitter_objs(tweet) #Count #, @, and http://
-    #features = [FKRA, FRE, syllables, num_chars, num_chars_total, num_terms, num_words,
-    #            num_unique_terms, sentiment['compound']]
-    features = [FKRA, FRE, sentiment['compound']]
+    features = [FKRA, FRE]
     return features
 
 
@@ -116,7 +111,7 @@ for i in range(upto,len(rows)): #for test data
 #splitting of train and test data
 traindata,testdata,trainlabel,testlabel = train_test_split(tweets,
                                                            label,
-                                                           test_size=0.10,random_state=42)
+                                                           test_size=0.30,random_state=42)
 train=[]                                                           
 for i in traindata:
     temp = preprocessing(i)
@@ -189,6 +184,12 @@ print(metrics.classification_report(testlabel, pred,
          target_names=title))
 print("Confusion Matrix")
 print(metrics.confusion_matrix(testlabel, pred))
+
+
+
+
+
+
 
 '''
 
